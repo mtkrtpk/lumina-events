@@ -203,12 +203,38 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border-glass);
   padding: 6px 14px;
   border-radius: 50px;
   font-size: 0.82rem;
   color: var(--text-muted);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s ease;
+}
+
+.stats-badge:hover {
+  border-color: var(--accent-gold);
+  background: rgba(245, 192, 112, 0.12);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.stats-badge:active {
+  transform: scale(0.96);
+}
+
+.sync-icon {
+  font-size: 0.82rem;
+  opacity: 0.8;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.sync-icon.spinning {
+  animation: spin 0.8s linear infinite;
+  opacity: 1;
 }
 
 .pulse-dot {

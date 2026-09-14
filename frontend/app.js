@@ -59,6 +59,48 @@ document.addEventListener("DOMContentLoaded", () => {
   loadStats();
 
   // ==========================================================================
+  // 1.1 Tek Tıkla Manuel Drive Senkronizasyonu (Sync)
+  // ==========================================================================
+  const btnSyncAlbum = document.getElementById("btnSyncAlbum");
+  const syncIcon = document.getElementById("syncIcon");
+  let isSyncing = false;
+
+  async function triggerDriveSync() {
+    if (isSyncing) return;
+    isSyncing = true;
+
+    syncIcon.classList.add("spinning");
+    statsText.textContent = "Drive taranıyor...";
+    showToast("🔄 Google Drive taranıyor, yeni fotoğraflar kontrol ediliyor...");
+
+    try {
+      const res = await fetch("/api/sync", { method: "POST" });
+      const data = await res.json();
+
+      if (data.status === "success") {
+        if (data.new_photos > 0) {
+          showToast(`✅ Harika! ${data.new_photos} yeni fotoğraf ve ${data.new_faces} yeni yüz eklendi!`);
+        } else {
+          showToast("✅ Drive güncel! Yeni bir fotoğraf bulunamadı.");
+        }
+      } else {
+        showToast("⚠️ Tarama sırasında uyarı: " + (data.message || "Bilinmeyen durum"));
+      }
+    } catch (err) {
+      console.error("Senkronizasyon hatası:", err);
+      showToast("❌ Drive ile iletişim kurulamadı.");
+    } finally {
+      syncIcon.classList.remove("spinning");
+      await loadStats();
+      isSyncing = false;
+    }
+  }
+
+  if (btnSyncAlbum) {
+    btnSyncAlbum.addEventListener("click", triggerDriveSync);
+  }
+
+  // ==========================================================================
   // 2. Canlı Kamera Kontrolü (WebRTC) ve Dosya Seçimi
   // ==========================================================================
   const cameraModal = document.getElementById("cameraModal");
