@@ -176,29 +176,49 @@ body {
 .btn-sync-action {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  background: rgba(245, 192, 112, 0.15);
+  background: linear-gradient(135deg, rgba(245, 192, 112, 0.18) 0%, rgba(232, 141, 103, 0.18) 100%);
   border: 1px solid var(--border-gold);
   color: var(--accent-champagne);
-  padding: 7px 16px;
+  padding: 8px 18px;
   border-radius: 50px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
 }
 
-.btn-sync-action:hover {
-  background: var(--accent-gold);
+.btn-sync-action:hover:not(:disabled) {
+  background: var(--accent-gradient);
   color: #080a0f;
   border-color: transparent;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(245, 192, 112, 0.35);
+  box-shadow: 0 4px 18px rgba(245, 192, 112, 0.35);
 }
 
-.btn-sync-action:active {
-  transform: scale(0.95);
+.btn-sync-action:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.btn-sync-action:disabled,
+.btn-sync-action.btn-loading {
+  opacity: 0.8;
+  cursor: not-allowed;
+  border-color: rgba(245, 192, 112, 0.4);
+  background: rgba(245, 192, 112, 0.08);
+  color: var(--accent-gold);
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-sync-action.sync-success {
+  background: rgba(16, 185, 129, 0.22) !important;
+  border-color: rgba(16, 185, 129, 0.6) !important;
+  color: #6ee7b7 !important;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) !important;
 }
 
 .header-instagram-btn {
@@ -343,6 +363,61 @@ body {
   margin-left: auto;
   margin-right: auto;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+/* ==========================================================================
+   Albüm Durum & Güncelleme Çubuğu (Fotoğrafların / Yüklemenin Üstünde)
+   ========================================================================== */
+.album-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(14, 18, 28, 0.72);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 12px 18px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  gap: 14px;
+  flex-wrap: wrap;
+  transition: all 0.3s ease;
+}
+
+.album-status-bar:hover {
+  border-color: rgba(245, 192, 112, 0.35);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 192, 112, 0.12);
+}
+
+.status-bar-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.status-bar-text {
+  font-size: 0.92rem;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.status-bar-text strong {
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+.status-auto-label {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  font-weight: 500;
 }
 
 /* ==========================================================================
@@ -932,28 +1007,33 @@ body {
 }
 
 /* ==========================================================================
-   Toast Bildirimi
+/* ==========================================================================
+   Toast Bildirimi (Üstte, Belirgin ve Gözden Kaçmaz)
    ========================================================================== */
 .toast {
   position: fixed;
-  bottom: 24px;
+  top: 85px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(18, 24, 38, 0.95);
-  border: 1px solid var(--border-glass);
-  color: var(--text-main);
-  padding: 12px 24px;
+  background: rgba(14, 18, 28, 0.96);
+  border: 1px solid var(--accent-gold);
+  color: #ffffff;
+  padding: 13px 26px;
   border-radius: 50px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  z-index: 200;
-  font-size: 0.9rem;
-  font-weight: 500;
-  backdrop-filter: blur(12px);
-  animation: toastSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(245, 192, 112, 0.25);
+  z-index: 250;
+  font-size: 0.92rem;
+  font-weight: 600;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: toastSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  max-width: 90vw;
+  pointer-events: none;
 }
 
-@keyframes toastSlideUp {
-  from { opacity: 0; transform: translate(-50%, 15px); }
+@keyframes toastSlideDown {
+  from { opacity: 0; transform: translate(-50%, -20px); }
   to { opacity: 1; transform: translate(-50%, 0); }
 }
 
@@ -1150,6 +1230,26 @@ body {
     font-size: 0.92rem;
     margin-bottom: 26px;
   }
+  .album-status-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 14px;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .status-bar-info {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .status-bar-text {
+    font-size: 0.84rem;
+  }
+  .album-status-bar .btn-sync-action {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+  }
   .upload-card {
     padding: 24px 16px;
   }
@@ -1167,6 +1267,12 @@ body {
   }
   .photo-name {
     display: none;
+  }
+  .toast {
+    top: 65px;
+    width: 90%;
+    font-size: 0.84rem;
+    padding: 10px 18px;
   }
   .contact-card {
     padding: 22px 16px;

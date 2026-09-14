@@ -105,7 +105,7 @@ async def lifespan(app: FastAPI):
     sync_task = None
     if AUTO_SYNC_INTERVAL > 0:
         sync_task = asyncio.create_task(background_sync_loop())
-        logger.info(f"Otomatik Drive tarayıcısı aktif edildi (Her {AUTO_SYNC_INTERVAL} saniyede bir kontrol edilecek).")
+        logger.info(f"Otomatik Drive tarayıcısı aktif edildi (Her {AUTO_SYNC_INTERVAL} saniyede / {AUTO_SYNC_INTERVAL // 60} dakikada bir kontrol edilecek).")
     yield
     if sync_task:
         sync_task.cancel()
@@ -131,6 +131,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Tarayıcıların JS/CSS dosyalarını önbelleğe alıp güncellemeleri kaçırmasını engelle (No-Cache)
+@app.middleware("http")
+async def add_no_cache_header(request, call_next):
+    response = await call_next(request)
+    path = request.url.path
+    if path.endswith((".js", ".css", ".html")) or path == "/":
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
+
 
 @app.get("/api/health")
 async def health_check():
@@ -148,7 +159,10 @@ async def health_check():
 @app.get("/api/stats")
 async def get_stats():
     """İndekslenmiş fotoğraf ve yüz istatistiklerini döner."""
-    return db.get_stats()
+    stats = db.get_stats()
+    stats["auto_sync_interval_seconds"] = AUTO_SYNC_INTERVAL
+    stats["auto_sync_interval_minutes"] = max(1, AUTO_SYNC_INTERVAL // 60)
+    return stats
 
 
 @app.post("/api/sync")

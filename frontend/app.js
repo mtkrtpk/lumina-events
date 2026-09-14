@@ -38,18 +38,38 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================================================
   // 1. İstatistikleri ve Sistem Durumunu Yükle
   // ==========================================================================
+  // 1. İstatistikleri ve Sistem Durumunu Yükle
+  // ==========================================================================
+  const statusBarText = document.getElementById("statusBarText");
+  const statusAutoLabel = document.getElementById("statusAutoLabel");
+  const btnSyncHero = document.getElementById("btnSyncHero");
+  const btnSyncResults = document.getElementById("btnSyncResults");
+  const btnSyncAlbum = document.getElementById("btnSyncAlbum");
+  const syncHeroText = document.getElementById("syncHeroText");
+  const syncResultsText = document.getElementById("syncResultsText");
+
   async function loadStats() {
     try {
       const res = await fetch("/api/stats");
       if (!res.ok) throw new Error("Stats alınamadı");
       const data = await res.json();
       const photos = data.total_photos || 0;
-      const faces = data.total_faces || 0;
+      const intervalMin = data.auto_sync_interval_minutes || 30;
 
       if (photos > 0) {
         statsText.textContent = `${photos.toLocaleString()} Fotoğraf Hazır`;
+        if (statusBarText) {
+          statusBarText.innerHTML = `Albümde <strong>${photos.toLocaleString()} Fotoğraf</strong> hazır`;
+        }
       } else {
         statsText.textContent = "Fotoğraflar bekleniyor";
+        if (statusBarText) {
+          statusBarText.innerHTML = "Albüm fotoğrafları taranıyor...";
+        }
+      }
+
+      if (statusAutoLabel) {
+        statusAutoLabel.textContent = `⏱️ ${intervalMin} dk'da bir otomatik`;
       }
     } catch (e) {
       statsText.textContent = "Sistem Çevrimiçi";
@@ -59,20 +79,28 @@ document.addEventListener("DOMContentLoaded", () => {
   loadStats();
 
   // ==========================================================================
-  // 1.1 Tek Tıkla Manuel Drive Senkronizasyonu (Sync)
+  // 1.1 Tek Tıkla Manuel Fotoğraf Güncelleme (Sync)
   // ==========================================================================
-  const btnSyncHeader = document.getElementById("btnSyncHeader");
-  const syncIcon = document.getElementById("syncIcon");
-  const statsBadge = document.getElementById("statsBadge");
   let isSyncing = false;
 
-  async function triggerDriveSync() {
+  async function triggerPhotoSync() {
     if (isSyncing) return;
     isSyncing = true;
 
-    if (syncIcon) syncIcon.classList.add("spinning");
-    statsText.textContent = "Drive taranıyor...";
-    showToast("🔄 Google Drive taranıyor, yeni fotoğraflar kontrol ediliyor...");
+    // 1. Butonları ve rozetleri hemen 'Taranıyor' moduna al (Anında görsel tepki)
+    const syncButtons = [btnSyncHero, btnSyncResults, btnSyncAlbum].filter(Boolean);
+    syncButtons.forEach(btn => {
+      btn.disabled = true;
+      btn.classList.add("btn-loading");
+    });
+
+    if (syncHeroText) syncHeroText.textContent = "⏳ Taranıyor...";
+    if (syncResultsText) syncResultsText.textContent = "⏳ Taranıyor...";
+    statsText.textContent = "Taranıyor...";
+
+    // Dönen ikonları aktive et
+    document.querySelectorAll(".sync-icon").forEach(icon => icon.classList.add("spinning"));
+    showToast("🔄 Yeni fotoğraflar taranıyor, lütfen bekleyin...");
 
     try {
       const res = await fetch("/api/sync", { method: "POST" });
@@ -80,30 +108,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (data.status === "success") {
         if (data.new_photos > 0) {
-          showToast(`✅ Harika! ${data.new_photos} yeni fotoğraf ve ${data.new_faces} yeni yüz eklendi!`);
+          showToast(`🎉 Harika! ${data.new_photos} yeni fotoğraf ve ${data.new_faces} yüz eklendi!`);
+          if (syncHeroText) syncHeroText.textContent = `✅ +${data.new_photos} Yeni Fotoğraf`;
+          if (syncResultsText) syncResultsText.textContent = `✅ +${data.new_photos} Yeni Fotoğraf`;
         } else {
-          showToast("✅ Drive güncel! Yeni bir fotoğraf bulunamadı.");
+          showToast("✅ Albüm güncel! Yeni yüklenen bir fotoğraf bulunamadı.");
+          if (syncHeroText) syncHeroText.textContent = "✅ Albüm Güncel";
+          if (syncResultsText) syncResultsText.textContent = "✅ Albüm Güncel";
         }
+        syncButtons.forEach(btn => btn.classList.add("sync-success"));
       } else {
-        showToast("⚠️ Tarama sırasında uyarı: " + (data.message || "Bilinmeyen durum"));
+        showToast("⚠️ Tarama uyarısı: " + (data.message || "Bilinmeyen durum"));
+        if (syncHeroText) syncHeroText.textContent = "⚠️ Tekrar Deneyin";
+        if (syncResultsText) syncResultsText.textContent = "⚠️ Tekrar Deneyin";
       }
     } catch (err) {
       console.error("Senkronizasyon hatası:", err);
-      showToast("❌ Drive ile iletişim kurulamadı.");
+      showToast("❌ Sunucu ile iletişim kurulamadı.");
+      if (syncHeroText) syncHeroText.textContent = "❌ Bağlantı Hatası";
+      if (syncResultsText) syncResultsText.textContent = "❌ Bağlantı Hatası";
     } finally {
-      if (syncIcon) syncIcon.classList.remove("spinning");
+      document.querySelectorAll(".sync-icon").forEach(icon => icon.classList.remove("spinning"));
       await loadStats();
-      isSyncing = false;
+
+      // 2.5 saniye sonra butonları normal durumuna döndür
+      setTimeout(() => {
+        if (syncHeroText) syncHeroText.textContent = "Fotoğrafları Güncelle";
+        if (syncResultsText) syncResultsText.textContent = "Fotoğrafları Güncelle";
+        syncButtons.forEach(btn => {
+          btn.disabled = false;
+          btn.classList.remove("btn-loading", "sync-success");
+        });
+        isSyncing = false;
+      }, 2500);
     }
   }
 
-  if (btnSyncHeader) {
-    btnSyncHeader.addEventListener("click", triggerDriveSync);
-  }
-  if (statsBadge) {
-    statsBadge.style.cursor = "pointer";
-    statsBadge.addEventListener("click", triggerDriveSync);
-  }
+  if (btnSyncHero) btnSyncHero.addEventListener("click", triggerPhotoSync);
+  if (btnSyncResults) btnSyncResults.addEventListener("click", triggerPhotoSync);
+  if (btnSyncAlbum) btnSyncAlbum.addEventListener("click", triggerPhotoSync);
 
   // ==========================================================================
   // 2. Canlı Kamera Kontrolü (WebRTC) ve Dosya Seçimi
