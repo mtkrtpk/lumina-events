@@ -61,15 +61,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================================================
   // 1.1 Tek Tıkla Manuel Drive Senkronizasyonu (Sync)
   // ==========================================================================
-  const btnSyncAlbum = document.getElementById("btnSyncAlbum");
+  const btnSyncHeader = document.getElementById("btnSyncHeader");
   const syncIcon = document.getElementById("syncIcon");
+  const statsBadge = document.getElementById("statsBadge");
   let isSyncing = false;
 
   async function triggerDriveSync() {
     if (isSyncing) return;
     isSyncing = true;
 
-    syncIcon.classList.add("spinning");
+    if (syncIcon) syncIcon.classList.add("spinning");
     statsText.textContent = "Drive taranıyor...";
     showToast("🔄 Google Drive taranıyor, yeni fotoğraflar kontrol ediliyor...");
 
@@ -90,14 +91,18 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Senkronizasyon hatası:", err);
       showToast("❌ Drive ile iletişim kurulamadı.");
     } finally {
-      syncIcon.classList.remove("spinning");
+      if (syncIcon) syncIcon.classList.remove("spinning");
       await loadStats();
       isSyncing = false;
     }
   }
 
-  if (btnSyncAlbum) {
-    btnSyncAlbum.addEventListener("click", triggerDriveSync);
+  if (btnSyncHeader) {
+    btnSyncHeader.addEventListener("click", triggerDriveSync);
+  }
+  if (statsBadge) {
+    statsBadge.style.cursor = "pointer";
+    statsBadge.addEventListener("click", triggerDriveSync);
   }
 
   // ==========================================================================

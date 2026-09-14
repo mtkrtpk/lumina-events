@@ -28,6 +28,12 @@
         </div>
       </div>
       <div class="header-right">
+        <!-- Belirgin Manuel Tarama Butonu (PC & Masaüstü için) -->
+        <button type="button" class="btn-sync-action" id="btnSyncHeader" title="Drive'daki yeni fotoğrafları hemen tara">
+          <span class="sync-icon" id="syncIcon">🔄</span>
+          <span class="sync-btn-text">Drive'ı Tara</span>
+        </button>
+
         <a href="https://instagram.com/mtkrtpk" target="_blank" rel="noopener noreferrer" class="header-instagram-btn" title="Instagram: @mtkrtpk">
           <svg class="header-instagram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
@@ -36,11 +42,11 @@
           </svg>
           <span>@mtkrtpk</span>
         </a>
-        <button type="button" class="stats-badge" id="btnSyncAlbum" title="Tıklayın: Google Drive'daki yeni fotoğrafları hemen tara">
+
+        <div class="stats-badge" id="statsBadge">
           <span class="pulse-dot" id="syncPulse"></span>
           <span id="statsText">Albüm Hazırlanıyor...</span>
-          <span class="sync-icon" id="syncIcon">🔄</span>
-        </button>
+        </div>
       </div>
     </div>
   </header>

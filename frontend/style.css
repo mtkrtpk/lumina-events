@@ -173,6 +173,34 @@ body {
   gap: 12px;
 }
 
+.btn-sync-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245, 192, 112, 0.15);
+  border: 1px solid var(--border-gold);
+  color: var(--accent-champagne);
+  padding: 7px 16px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-sync-action:hover {
+  background: var(--accent-gold);
+  color: #080a0f;
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(245, 192, 112, 0.35);
+}
+
+.btn-sync-action:active {
+  transform: scale(0.95);
+}
+
 .header-instagram-btn {
   display: inline-flex;
   align-items: center;
