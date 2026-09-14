@@ -40,12 +40,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================================================
   // 1. İstatistikleri ve Sistem Durumunu Yükle
   // ==========================================================================
-  const statusBarText = document.getElementById("statusBarText");
-  const statusAutoLabel = document.getElementById("statusAutoLabel");
-  const btnSyncHero = document.getElementById("btnSyncHero");
   const btnSyncResults = document.getElementById("btnSyncResults");
   const btnSyncAlbum = document.getElementById("btnSyncAlbum");
-  const syncHeroText = document.getElementById("syncHeroText");
   const syncResultsText = document.getElementById("syncResultsText");
 
   async function loadStats() {
@@ -54,22 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!res.ok) throw new Error("Stats alınamadı");
       const data = await res.json();
       const photos = data.total_photos || 0;
-      const intervalMin = data.auto_sync_interval_minutes || 30;
 
       if (photos > 0) {
         statsText.textContent = `${photos.toLocaleString()} Fotoğraf Hazır`;
-        if (statusBarText) {
-          statusBarText.innerHTML = `Albümde <strong>${photos.toLocaleString()} Fotoğraf</strong> hazır`;
-        }
       } else {
         statsText.textContent = "Fotoğraflar bekleniyor";
-        if (statusBarText) {
-          statusBarText.innerHTML = "Albüm fotoğrafları taranıyor...";
-        }
-      }
-
-      if (statusAutoLabel) {
-        statusAutoLabel.textContent = `⏱️ ${intervalMin} dk'da bir otomatik`;
       }
     } catch (e) {
       statsText.textContent = "Sistem Çevrimiçi";
@@ -88,13 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
     isSyncing = true;
 
     // 1. Butonları ve rozetleri hemen 'Taranıyor' moduna al (Anında görsel tepki)
-    const syncButtons = [btnSyncHero, btnSyncResults, btnSyncAlbum].filter(Boolean);
+    const syncButtons = [btnSyncResults, btnSyncAlbum].filter(Boolean);
     syncButtons.forEach(btn => {
       btn.disabled = true;
       btn.classList.add("btn-loading");
     });
 
-    if (syncHeroText) syncHeroText.textContent = "⏳ Taranıyor...";
     if (syncResultsText) syncResultsText.textContent = "⏳ Taranıyor...";
     statsText.textContent = "Taranıyor...";
 
@@ -109,23 +93,19 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.status === "success") {
         if (data.new_photos > 0) {
           showToast(`🎉 Harika! ${data.new_photos} yeni fotoğraf ve ${data.new_faces} yüz eklendi!`);
-          if (syncHeroText) syncHeroText.textContent = `✅ +${data.new_photos} Yeni Fotoğraf`;
           if (syncResultsText) syncResultsText.textContent = `✅ +${data.new_photos} Yeni Fotoğraf`;
         } else {
           showToast("✅ Albüm güncel! Yeni yüklenen bir fotoğraf bulunamadı.");
-          if (syncHeroText) syncHeroText.textContent = "✅ Albüm Güncel";
           if (syncResultsText) syncResultsText.textContent = "✅ Albüm Güncel";
         }
         syncButtons.forEach(btn => btn.classList.add("sync-success"));
       } else {
         showToast("⚠️ Tarama uyarısı: " + (data.message || "Bilinmeyen durum"));
-        if (syncHeroText) syncHeroText.textContent = "⚠️ Tekrar Deneyin";
         if (syncResultsText) syncResultsText.textContent = "⚠️ Tekrar Deneyin";
       }
     } catch (err) {
       console.error("Senkronizasyon hatası:", err);
       showToast("❌ Sunucu ile iletişim kurulamadı.");
-      if (syncHeroText) syncHeroText.textContent = "❌ Bağlantı Hatası";
       if (syncResultsText) syncResultsText.textContent = "❌ Bağlantı Hatası";
     } finally {
       document.querySelectorAll(".sync-icon").forEach(icon => icon.classList.remove("spinning"));
@@ -133,7 +113,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // 2.5 saniye sonra butonları normal durumuna döndür
       setTimeout(() => {
-        if (syncHeroText) syncHeroText.textContent = "Fotoğrafları Güncelle";
         if (syncResultsText) syncResultsText.textContent = "Fotoğrafları Güncelle";
         syncButtons.forEach(btn => {
           btn.disabled = false;
@@ -144,7 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  if (btnSyncHero) btnSyncHero.addEventListener("click", triggerPhotoSync);
   if (btnSyncResults) btnSyncResults.addEventListener("click", triggerPhotoSync);
   if (btnSyncAlbum) btnSyncAlbum.addEventListener("click", triggerPhotoSync);
 

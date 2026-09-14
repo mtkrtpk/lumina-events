@@ -366,61 +366,6 @@ body {
 }
 
 /* ==========================================================================
-   Albüm Durum & Güncelleme Çubuğu (Fotoğrafların / Yüklemenin Üstünde)
-   ========================================================================== */
-.album-status-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(14, 18, 28, 0.72);
-  border: 1px solid var(--border-glass);
-  border-radius: var(--radius-md);
-  padding: 12px 18px;
-  margin-bottom: 24px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  gap: 14px;
-  flex-wrap: wrap;
-  transition: all 0.3s ease;
-}
-
-.album-status-bar:hover {
-  border-color: rgba(245, 192, 112, 0.35);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 192, 112, 0.12);
-}
-
-.status-bar-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.status-bar-text {
-  font-size: 0.92rem;
-  color: var(--text-main);
-  font-weight: 500;
-}
-
-.status-bar-text strong {
-  color: var(--accent-gold);
-  font-weight: 700;
-}
-
-.status-auto-label {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 0.76rem;
-  color: var(--text-dim);
-  font-weight: 500;
-}
-
-/* ==========================================================================
    Yükleme Kartı & Drop Zone
    ========================================================================== */
 .upload-card {
@@ -1229,26 +1174,6 @@ body {
   .hero-subtitle {
     font-size: 0.92rem;
     margin-bottom: 26px;
-  }
-  .album-status-bar {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 12px 14px;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  .status-bar-info {
-    justify-content: space-between;
-    width: 100%;
-  }
-  .status-bar-text {
-    font-size: 0.84rem;
-  }
-  .album-status-bar .btn-sync-action {
-    width: 100%;
-    justify-content: center;
-    padding: 10px 14px;
-    font-size: 0.85rem;
   }
   .upload-card {
     padding: 24px 16px;

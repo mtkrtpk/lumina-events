@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- CSS Versiyonlu (Önbellek Engelleme) -->
-  <link rel="stylesheet" href="style.css?v=4.0">
+  <link rel="stylesheet" href="style.css?v=4.1">
 </head>
 <body>
   <!-- Sabit Düğün Arka Planı Katmanı -->
@@ -41,7 +41,7 @@
         <!-- Header Rozeti (Kompakt ve Tıklanabilir) -->
         <button type="button" class="stats-badge" id="btnSyncAlbum" title="Tıkla: Fotoğrafları Yenile">
           <span class="pulse-dot" id="syncPulse"></span>
-          <span id="statsText">6 Fotoğraf Hazır</span>
+          <span id="statsText">Albüm Hazırlanıyor...</span>
           <span class="sync-icon" id="syncIconHeader">🔄</span>
         </button>
       </div>
@@ -61,19 +61,6 @@
       <p class="hero-subtitle">
         Birlikte paylaştığımız bu mutlu günden binlerce kareyi tek tek aramak zorunda değilsiniz. Bir selfie çekin, içinde olduğunuz tüm güzel anıları saniyeler içinde sizin için derleyelim.
       </p>
-
-      <!-- Fotoğrafların / Yüklemenin Hemen Üstündeki Güncelleme Barı -->
-      <div class="album-status-bar" id="albumStatusBar">
-        <div class="status-bar-info">
-          <span class="pulse-dot"></span>
-          <span class="status-bar-text" id="statusBarText">Albümde <strong>6 Fotoğraf</strong> hazır</span>
-          <span class="status-auto-label" id="statusAutoLabel">⏱️ 30 dk'da bir otomatik</span>
-        </div>
-        <button type="button" class="btn-sync-action" id="btnSyncHero" title="Yeni fotoğrafları hemen kontrol et">
-          <span class="sync-icon" id="syncIconHero">🔄</span>
-          <span class="btn-sync-text" id="syncHeroText">Fotoğrafları Güncelle</span>
-        </button>
-      </div>
 
       <!-- Yükleme Kartı -->
       <div class="upload-card" id="uploadCard">
@@ -226,6 +213,6 @@
     <p>© 2026 Lumina Events • Tüm Hakları Saklıdır</p>
   </footer>
 
-  <script src="app.js?v=4.0"></script>
+  <script src="app.js?v=4.1"></script>
 </body>
 </html>
