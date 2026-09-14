@@ -68,38 +68,50 @@ class DriveService:
         """API bağlantısının hazır olup olmadığını kontrol eder."""
         return self.service is not None
 
-    def list_images_in_folder(self, folder_id: str) -> List[Dict[str, Any]]:
+    def list_images_in_folder(self, folder_id: str, recursive: bool = True) -> List[Dict[str, Any]]:
         """
-        Belirtilen Drive klasöründeki tüm görsel dosyalarını (JPEG, PNG, HEIC vb.) listeler.
-        Tüm sayfalama (pagination) adımlarını otomatik olarak tamamlar.
+        Belirtilen Drive klasöründeki ve varsa tüm alt klasörlerindeki (Google Form klasörleri dahil)
+        tüm görsel dosyalarını özyinelemeli (recursive) olarak listeler.
         """
         if not self.service:
             raise RuntimeError("Drive servisi bağlı değil. Lütfen credentials.json dosyasını kontrol edin.")
 
-        query = f"'{folder_id}' in parents and mimeType contains 'image/' and trashed = false"
-        images = []
-        page_token = None
+        folders_to_scan = [folder_id]
+        all_images = []
+        scanned_folders = set()
 
-        logger.info(f"Drive klasörü taranıyor: {folder_id}")
+        while folders_to_scan:
+            current_folder = folders_to_scan.pop(0)
+            if current_folder in scanned_folders:
+                continue
+            scanned_folders.add(current_folder)
 
-        while True:
-            response = self.service.files().list(
-                q=query,
-                spaces='drive',
-                fields='nextPageToken, files(id, name, mimeType, thumbnailLink, webViewLink, webContentLink)',
-                pageToken=page_token,
-                pageSize=100
-            ).execute()
+            page_token = None
+            query = f"'{current_folder}' in parents and trashed = false"
 
-            files = response.get('files', [])
-            images.extend(files)
+            while True:
+                response = self.service.files().list(
+                    q=query,
+                    spaces='drive',
+                    fields='nextPageToken, files(id, name, mimeType, thumbnailLink, webViewLink, webContentLink)',
+                    pageToken=page_token,
+                    pageSize=100
+                ).execute()
 
-            page_token = response.get('nextPageToken')
-            if not page_token:
-                break
+                items = response.get('files', [])
+                for item in items:
+                    mime = item.get('mimeType', '')
+                    if mime.startswith('image/'):
+                        all_images.append(item)
+                    elif recursive and mime == 'application/vnd.google-apps.folder':
+                        folders_to_scan.append(item['id'])
 
-        logger.info(f"Toplam {len(images)} adet fotoğraf bulundu.")
-        return images
+                page_token = response.get('nextPageToken')
+                if not page_token:
+                    break
+
+        logger.info(f"Toplam {len(all_images)} adet fotoğraf bulundu ({len(scanned_folders)} klasör tarandı).")
+        return all_images
 
     def download_image_to_memory(self, file_id: str) -> io.BytesIO:
         """
