@@ -12,6 +12,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+import asyncio
+from contextlib import asynccontextmanager
+
 # Backend kök dizinini sys.path'e ekle
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..'))
@@ -25,13 +28,101 @@ from app.drive_service import DriveService
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("api")
 
+# Tekil örnekler (Singletons)
+db = Database()
+face_engine = FaceEngine()
+drive_service = DriveService()
+
+AUTO_SYNC_INTERVAL = int(os.getenv("AUTO_SYNC_INTERVAL", 90))
+
+
+def perform_incremental_sync(folder_id: str) -> dict:
+    """Drive klasörünü kontrol edip yalnızca henüz veritabanında olmayan yeni fotoğrafları indeksler."""
+    if not drive_service.is_connected():
+        return {"status": "error", "message": "Drive bağlı değil"}
+
+    try:
+        images = drive_service.list_images_in_folder(folder_id)
+    except Exception as e:
+        logger.error(f"Otomatik tarama klasör okuma hatası: {e}")
+        return {"status": "error", "message": str(e)}
+
+    new_indexed = 0
+    new_faces = 0
+
+    for img in images:
+        drive_id = img["id"]
+        if db.photo_exists(drive_id):
+            continue
+
+        try:
+            filename = img.get("name", "photo.jpg")
+            stream = drive_service.download_image_to_memory(drive_id)
+            view_url = drive_service.get_direct_view_url(drive_id)
+            download_url = drive_service.get_download_url(drive_id)
+
+            photo_id = db.add_photo(
+                drive_id=drive_id,
+                filename=filename,
+                view_url=view_url,
+                download_url=download_url,
+                mime_type=img.get("mimeType", "image/jpeg")
+            )
+
+            faces = face_engine.extract_faces_from_image(stream)
+            for face in faces:
+                db.add_face(photo_id, face["embedding"], face["box"], face["confidence"])
+                new_faces += 1
+
+            new_indexed += 1
+            logger.info(f"Arka plan: Yeni fotoğraf indekslendi -> {filename} ({len(faces)} yüz)")
+        except Exception as e:
+            logger.error(f"Fotoğraf otomatik işlenirken hata ({drive_id}): {e}")
+
+    if new_indexed > 0:
+        logger.info(f"✅ Otomatik senkronizasyon: {new_indexed} yeni fotoğraf, {new_faces} yeni yüz eklendi.")
+
+    return {"status": "success", "new_photos": new_indexed, "new_faces": new_faces}
+
+
+async def background_sync_loop():
+    """Belirli aralıklarla (varsayılan 90 saniye) arka planda otomatik tarama yapar."""
+    while True:
+        try:
+            await asyncio.sleep(AUTO_SYNC_INTERVAL)
+            folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
+            if folder_id and folder_id != "BURAYA_DRIVE_KLASOR_ID_GELECEK" and drive_service.is_connected():
+                await asyncio.to_thread(perform_incremental_sync, folder_id)
+        except asyncio.CancelledError:
+            logger.info("Arka plan tarayıcısı durduruldu.")
+            break
+        except Exception as e:
+            logger.error(f"Arka plan döngüsünde beklenmeyen hata: {e}")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    sync_task = None
+    if AUTO_SYNC_INTERVAL > 0:
+        sync_task = asyncio.create_task(background_sync_loop())
+        logger.info(f"Otomatik Drive tarayıcısı aktif edildi (Her {AUTO_SYNC_INTERVAL} saniyede bir kontrol edilecek).")
+    yield
+    if sync_task:
+        sync_task.cancel()
+        try:
+            await sync_task
+        except asyncio.CancelledError:
+            pass
+
+
 app = FastAPI(
-    title="Fotoğraf Paylaşım & Yüz Eşleme Platformu API",
-    description="Google Drive ve Face Recognition tabanlı 0 maliyetli etkinlik fotoğraf arama servisi",
-    version="1.0.0"
+    title="Lumina Events API",
+    description="Google Drive ve Face Recognition tabanlı akıllı etkinlik fotoğraf servisi",
+    version="1.0.0",
+    lifespan=lifespan
 )
 
-# Mobil cihazların yerel ağdan (192.168.x.x vb.) veya farklı alan adlarından erişebilmesi için CORS izni
+# Mobil cihazların yerel ağdan erişebilmesi için CORS izni
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -39,11 +130,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Tekil örnekler (Singletons)
-db = Database()
-face_engine = FaceEngine()
-drive_service = DriveService()
 
 
 @app.get("/api/health")
@@ -63,6 +149,17 @@ async def health_check():
 async def get_stats():
     """İndekslenmiş fotoğraf ve yüz istatistiklerini döner."""
     return db.get_stats()
+
+
+@app.post("/api/sync")
+async def manual_sync():
+    """İsteğe bağlı anlık Drive taramasını manuel olarak tetikler."""
+    folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
+    if not folder_id or folder_id == "BURAYA_DRIVE_KLASOR_ID_GELECEK":
+        raise HTTPException(status_code=400, detail="Google Drive klasör ID ayarlanmamış.")
+    result = await asyncio.to_thread(perform_incremental_sync, folder_id)
+    return result
+
 
 
 @app.post("/api/search")
