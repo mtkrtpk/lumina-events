@@ -1,0 +1,21 @@
+# Web Framework & Server
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+python-multipart>=0.0.9
+pydantic>=2.6.0
+python-dotenv>=1.0.1
+
+# Google Drive API
+google-api-python-client>=2.120.0
+google-auth-httplib2>=0.2.0
+google-auth-oauthlib>=1.2.0
+requests>=2.31.0
+
+# Görüntü İşleme & Vektör Hesaplamaları
+numpy>=1.26.0
+Pillow>=10.2.0
+
+# Yüz Tanıma & AI (Apple Silicon MPS / Metal GPU Destekli)
+torch>=2.2.0
+torchvision>=0.17.0
+facenet-pytorch>=2.6.0

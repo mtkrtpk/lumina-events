@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Anılarını Keşfet | AI Fotoğraf Bulucu</title>
+  <meta name="description" content="Düğün ve etkinlik fotoğrafları arasından yapay zeka ile sadece kendinizin olduğu kareleri anında bulun ve indirin.">
+  
+  <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Sabit Düğün Arka Planı Katmanı -->
+  <div class="wedding-bg-layer"></div>
+
+  <!-- Üst Bar / Header -->
+  <header class="header">
+    <div class="container header-content">
+      <div class="logo">
+        <span class="logo-icon">✨</span>
+        <div class="logo-brand">
+          <span class="logo-title">Lumina <span class="accent-serif">Events</span></span>
+          <span class="logo-sub">Event & Wedding Memories</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <a href="https://instagram.com/mtkrtpk" target="_blank" rel="noopener noreferrer" class="header-instagram-btn" title="Instagram: @mtkrtpk">
+          <svg class="header-instagram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+          <span>@mtkrtpk</span>
+        </a>
+        <div class="stats-badge" id="statsBadge">
+          <span class="pulse-dot"></span>
+          <span id="statsText">Albüm Hazırlanıyor...</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Ana İçerik -->
+  <main class="container main-content">
+    
+    <!-- Karşılama ve Selfie Yükleme Alanı -->
+    <section class="hero-section" id="heroSection">
+      <div class="hero-badge">✨ Bizimle Paylaştığınız Özel Anlar</div>
+      <h1 class="hero-title">
+        Fotoğrafların Arasında <br>
+        <span class="wedding-script">Kendinizi Bulun</span>
+      </h1>
+      <p class="hero-subtitle">
+        Birlikte paylaştığımız bu mutlu günden binlerce kareyi tek tek aramak zorunda değilsiniz. Bir selfie çekin, içinde olduğunuz tüm güzel anıları saniyeler içinde sizin için derleyelim.
+      </p>
+
+      <!-- Yükleme Kartı -->
+      <div class="upload-card" id="uploadCard">
+        <input type="file" id="cameraInput" accept="image/*" capture="user" class="hidden-input">
+        <input type="file" id="galleryInput" accept="image/*" class="hidden-input">
+
+        <div class="drop-zone" id="dropZone">
+          <div class="upload-icon-wrapper">
+            <svg class="upload-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </div>
+          <h3 class="drop-title">Selfie'ni Yükle veya Fotoğraf Çek</h3>
+          <p class="drop-desc">Doğrudan kameraya baktığınız net bir kare yükleyin</p>
+
+          <div class="action-buttons">
+            <button type="button" class="btn btn-primary" id="btnCamera">
+              <span class="btn-icon">📷</span> Kamera ile Çek
+            </button>
+            <button type="button" class="btn btn-secondary" id="btnGallery">
+              <span class="btn-icon">🖼️</span> Galeriden Seç
+            </button>
+          </div>
+        </div>
+
+        <!-- Önizleme ve Tarama Animasyonu -->
+        <div class="preview-zone hidden" id="previewZone">
+          <div class="preview-box">
+            <img id="previewImage" src="" alt="Selfie Önizleme">
+            <div class="scan-laser" id="scanLaser"></div>
+            <div class="scan-overlay"></div>
+          </div>
+          <div class="scan-status" id="scanStatus">
+            <div class="spinner"></div>
+            <span id="scanStatusText">Yüz taranıyor ve albüm eşleştiriliyor...</span>
+          </div>
+          <button type="button" class="btn btn-ghost" id="btnCancelScan">Farklı Fotoğraf Seç</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sonuçlar ve Galeri Bölümü -->
+    <section class="results-section hidden" id="resultsSection">
+      <div class="results-header">
+        <div>
+          <h2 class="results-title">Senin Fotoğrafların</h2>
+          <p class="results-subtitle" id="resultsSubtitle">Yapay zeka eşleştirmeleri listeleniyor...</p>
+        </div>
+        <div class="results-actions">
+          <button type="button" class="btn btn-sm btn-outline" id="btnNewSearch">
+            🔄 Yeni Arama Yap
+          </button>
+        </div>
+      </div>
+
+      <!-- Fotoğraf Izgarası (Grid) -->
+      <div class="photo-grid" id="photoGrid">
+        <!-- JS ile dinamik doldurulacak -->
+      </div>
+    </section>
+
+    <!-- Sonuç Bulunamadı Durumu -->
+    <div class="empty-state hidden" id="emptyState">
+      <div class="empty-icon">🔍</div>
+      <h3 class="empty-title">Eşleşen Fotoğraf Bulunamadı</h3>
+      <p class="empty-desc">
+        Bu albümde sizinle eşleşen bir kareye rastlanmadı. Dilerseniz farklı ışık veya açıda yeni bir selfie ile tekrar deneyebilirsiniz.
+      </p>
+      <button type="button" class="btn btn-primary" id="btnRetry">Tekrar Dene</button>
+    </div>
+
+    <!-- İletişim & Rezervasyon Kartı (Her zaman görünür) -->
+    <section class="contact-section" id="contactSection">
+      <div class="contact-card">
+        <div class="contact-info">
+          <span class="contact-tag">📸 Özel Gün Fotoğraf & Deneyim Hizmeti</span>
+          <h3 class="contact-title">Kendi Etkinliğinizde Bu Deneyimi Yaşatmak İster Misiniz?</h3>
+          <p class="contact-desc">
+            Düğün, nişan ve özel davetlerinizde misafirlerinizin anında kendi fotoğraflarına ulaşmasını sağlayacak bu akıllı sistemi etkinliğinize taşımak için bize ulaşabilirsiniz.
+          </p>
+        </div>
+        <div class="contact-action">
+          <a href="https://instagram.com/mtkrtpk" target="_blank" rel="noopener noreferrer" class="btn-instagram">
+            <svg class="instagram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <div class="insta-text">
+              <span class="insta-label">Instagram'da Ulaşın</span>
+              <span class="insta-handle">@mtkrtpk</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+    <!-- Canlı Kamera Modalı (WebRTC) -->
+    <div class="camera-modal hidden" id="cameraModal">
+      <div class="camera-backdrop" id="cameraBackdrop"></div>
+      <div class="camera-card">
+        <div class="camera-topbar">
+          <span class="camera-title">📷 Selfie Çek</span>
+          <button type="button" class="camera-close" id="btnCloseCamera">&times;</button>
+        </div>
+        <div class="camera-feed-wrapper">
+          <video id="cameraVideo" autoplay playsinline muted></video>
+          <div class="camera-guide-ring">
+            <div class="guide-corners"></div>
+          </div>
+          <canvas id="cameraCanvas" class="hidden"></canvas>
+        </div>
+        <div class="camera-bottombar">
+          <button type="button" class="btn-shutter" id="btnShutter" title="Fotoğraf Çek">
+            <span class="shutter-circle"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  <!-- Tam Ekran Fotoğraf Önizleme (Lightbox Modal) -->
+  <div class="lightbox hidden" id="lightboxModal">
+    <div class="lightbox-backdrop" id="lightboxBackdrop"></div>
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Kapat">&times;</button>
+      <div class="lightbox-image-wrapper">
+        <img id="lightboxImage" src="" alt="Büyük Önizleme">
+      </div>
+      <div class="lightbox-footer">
+        <span class="lightbox-match-badge" id="lightboxScore">98% Eşleşme</span>
+        <a href="" target="_blank" download class="btn btn-primary btn-sm" id="lightboxDownloadBtn">
+          ⬇️ Orijinal Boyutta İndir
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Bildirimi -->
+  <div class="toast hidden" id="toast"></div>
+
+  <!-- Alt Bilgi / Footer -->
+  <footer class="footer">
+    <p>© 2026 Lumina Events • Tüm Hakları Saklıdır</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

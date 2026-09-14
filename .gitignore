@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# Google Drive Credentials & Tokens (Hassas Bilgiler)
+backend/credentials/*
+!backend/credentials/.gitkeep
+token.json
+credentials.json
+
+# SQLite Data & Cache
+backend/data/*.db
+backend/data/*.sqlite
+backend/data/*.json
+!backend/data/.gitkeep
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
