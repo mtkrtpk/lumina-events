@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masa QR Kartı Tasarımı | Lumina Events</title>
+  
+  <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #080a0f;
+      --gold-primary: #d4af37;
+      --gold-light: #f5c070;
+      --gold-border: rgba(212, 175, 55, 0.45);
+      --font-serif: 'Playfair Display', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #121620;
+      color: #fdfbf7;
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px 16px;
+    }
+
+    /* Üst Kontrol Barı (Baskıda Gizlenir) */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 840px;
+      margin-bottom: 24px;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: rgba(22, 28, 42, 0.9);
+      padding: 14px 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toolbar-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--gold-light);
+    }
+
+    .theme-toggle-group {
+      display: flex;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 4px;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .theme-btn {
+      background: transparent;
+      border: none;
+      color: #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .theme-btn.active {
+      background: var(--gold-light);
+      color: #080a0f;
+    }
+
+    .btn-print {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #f5c070 0%, #e88d67 100%);
+      color: #080a0f;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(245, 192, 112, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .btn-print:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-back {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-back:hover {
+      color: #fff;
+    }
+
+    /* ==========================================================================
+       Masa Kartı Alanı (10x15 cm / A6 Orantılı)
+       ========================================================================== */
+    .card-container {
+      width: 100%;
+      max-width: 440px;
+      aspect-ratio: 10 / 15;
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+      transition: all 0.3s ease;
+    }
+
+    /* Koyu Lüks Tema (Varsayılan) */
+    .card-theme-dark {
+      background: linear-gradient(165deg, #090c14 0%, #101524 50%, #080b12 100%);
+      color: #fdfbf7;
+      border: 2px solid var(--gold-primary);
+    }
+
+    /* Açık Fildişi & Şampanya Tema */
+    .card-theme-light {
+      background: linear-gradient(165deg, #fbf9f4 0%, #f4eee1 50%, #faf6ee 100%);
+      color: #1a1e28;
+      border: 2px solid #c59b27;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 38px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+    }
+
+    /* Çift Kenarlık & Köşe Desenleri */
+    .card-border-frame {
+      position: absolute;
+      inset: 12px;
+      border: 1px solid var(--gold-border);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    .corner-decor {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-color: var(--gold-primary);
+      border-style: solid;
+      pointer-events: none;
+    }
+    .corner-tl { top: 16px; left: 16px; border-width: 2px 0 0 2px; }
+    .corner-tr { top: 16px; right: 16px; border-width: 2px 2px 0 0; }
+    .corner-bl { bottom: 16px; left: 16px; border-width: 0 0 2px 2px; }
+    .corner-br { bottom: 16px; right: 16px; border-width: 0 2px 2px 0; }
+
+    /* Kart Üst Başlık */
+    .card-header {
+      position: relative;
+      z-index: 2;
+    }
+
+    .card-sparkle {
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+      display: inline-block;
+    }
+
+    .card-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+    }
+    .card-theme-light .card-badge {
+      color: #966f1e;
+    }
+
+    .card-title {
+      font-family: var(--font-serif);
+      font-size: 1.85rem;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.3px;
+      margin-bottom: 10px;
+    }
+
+    .card-theme-dark .card-title {
+      background: linear-gradient(135deg, #fae1b8 0%, #f5c070 50%, #e88d67 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-theme-light .card-title {
+      color: #1a1e28;
+    }
+
+    .card-subtitle {
+      font-size: 0.84rem;
+      line-height: 1.5;
+      max-width: 290px;
+      margin: 0 auto;
+      color: #cbd5e1;
+    }
+    .card-theme-light .card-subtitle {
+      color: #555d6e;
+    }
+
+    /* QR Kod Alanı */
+    .card-qr-wrapper {
+      position: relative;
+      background: #ffffff;
+      padding: 14px;
+      border-radius: 18px;
+      border: 2px solid var(--gold-primary);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      margin: 12px 0;
+    }
+
+    .card-theme-light .card-qr-wrapper {
+      border-color: #c59b27;
+      box-shadow: 0 8px 25px rgba(197, 155, 39, 0.25);
+    }
+
+    .card-qr-img {
+      width: 170px;
+      height: 170px;
+      display: block;
+      object-fit: contain;
+    }
+
+    /* Kart Alt Bilgi */
+    .card-footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    .scan-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(245, 192, 112, 0.12);
+      border: 1px solid rgba(245, 192, 112, 0.3);
+      padding: 6px 16px;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      margin-bottom: 12px;
+    }
+    .card-theme-light .scan-cta {
+      background: rgba(197, 155, 39, 0.1);
+      border-color: rgba(197, 155, 39, 0.35);
+      color: #855f14;
+    }
+
+    .thanks-text {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1rem;
+      margin-bottom: 6px;
+      color: #fae1b8;
+    }
+    .card-theme-light .thanks-text {
+      color: #2b3140;
+    }
+
+    .brand-tag {
+      font-size: 0.68rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #94a3b8;
+    }
+    .card-theme-light .brand-tag {
+      color: #717d96;
+    }
+
+    /* ==========================================================================
+       Yazdırma Ayarları (@media print)
+       ========================================================================== */
+    @media print {
+      body {
+        background: transparent !important;
+        padding: 0 !important;
+      }
+      .toolbar {
+        display: none !important;
+      }
+      .card-container {
+        box-shadow: none !important;
+        width: 10cm !important;
+        height: 15cm !important;
+        border-radius: 0 !important;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Üst Araç Çubuğu (Yazdırma ve Tema Değiştirme) -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <a href="/" class="btn-back">← Siteye Dön</a>
+      <span class="toolbar-title">✨ Masa QR Kartı (10x15 cm)</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div class="theme-toggle-group">
+        <button type="button" class="theme-btn active" id="btnThemeDark">🌙 Koyu Gece & Altın</button>
+        <button type="button" class="theme-btn" id="btnThemeLight">☀️ Fildişi & Şampanya</button>
+      </div>
+      <button type="button" class="btn-print" onclick="window.print()">
+        🖨️ Yazdır / PDF İndir
+      </button>
+    </div>
+  </div>
+
+  <!-- Masa Kartı -->
+  <div class="card-container card-theme-dark" id="cardContainer">
+    <div class="card-inner">
+      <div class="card-border-frame"></div>
+      <div class="corner-decor corner-tl"></div>
+      <div class="corner-decor corner-tr"></div>
+      <div class="corner-decor corner-bl"></div>
+      <div class="corner-decor corner-br"></div>
+
+      <!-- Üst Başlık -->
+      <div class="card-header">
+        <span class="card-sparkle">✨</span>
+        <div class="card-badge">BİZİMLE PAYLAŞTIĞINIZ ANILAR</div>
+        <h1 class="card-title">Gözünüzden <br>Bizim Günümüz</h1>
+        <p class="card-subtitle">
+          Bu mutlu günde çektiğiniz tüm güzel fotoğraf ve videoları ortak albümümüze ekleyebilirsiniz.
+        </p>
+      </div>
+
+      <!-- Kullanıcının QR Kodu -->
+      <div class="card-qr-wrapper">
+        <img src="assets/form_qr.png" alt="Google Form QR Kodu" class="card-qr-img">
+      </div>
+
+      <!-- Alt Bilgi & Çağrı -->
+      <div class="card-footer">
+        <div class="scan-cta">
+          <span>📷</span> Kameranızı QR Koda Doğrultun
+        </div>
+        <p class="thanks-text">Mutluluğumuzu paylaştığınız için teşekkür ederiz</p>
+        <span class="brand-tag">Lumina Events • @mtkrtpk</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cardContainer = document.getElementById('cardContainer');
+    const btnThemeDark = document.getElementById('btnThemeDark');
+    const btnThemeLight = document.getElementById('btnThemeLight');
+
+    btnThemeDark.addEventListener('click', () => {
+      cardContainer.className = 'card-container card-theme-dark';
+      btnThemeDark.classList.add('active');
+      btnThemeLight.classList.remove('active');
+    });
+
+    btnThemeLight.addEventListener('click', () => {
+      cardContainer.className = 'card-container card-theme-light';
+      btnThemeLight.classList.add('active');
+      btnThemeDark.classList.remove('active');
+    });
+  </script>
+</body>
+</html>
