@@ -1720,71 +1720,129 @@ body {
    ========================================================================== */
 @media (max-width: 640px) {
   .header {
-    padding-top: max(10px, env(safe-area-inset-top));
-    padding-bottom: 4px;
+    padding-top: max(8px, env(safe-area-inset-top));
+    padding-bottom: 6px;
   }
   .header-content {
-    min-height: 52px;
+    min-height: 48px;
     height: auto;
-    padding: 4px 0;
-    gap: 8px;
+    padding: 2px 0;
+    gap: 6px;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
   }
   .logo {
-    gap: 8px;
+    gap: 6px;
+    flex-shrink: 0;
   }
   .logo-icon {
-    font-size: 1.25rem;
-  }
-  .logo-title {
     font-size: 1.15rem;
   }
+  .logo-title {
+    font-size: 1.05rem;
+    white-space: nowrap;
+  }
   .logo-sub {
-    font-size: 0.58rem;
-    letter-spacing: 0.2px;
+    display: none; /* Mobilde başlık ferah olsun diye alt yazıyı gizle */
   }
   .header-right {
-    gap: 4px;
+    gap: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 1;
+    min-width: 0;
   }
   .header-upload-btn {
-    padding: 5px 8px;
-    font-size: 0.70rem;
-    gap: 3px;
-  }
-  .header-qr-btn {
-    padding: 5px 7px;
-    font-size: 0.70rem;
-    gap: 3px;
+    padding: 6px 9px;
+    font-size: 0.72rem;
+    gap: 4px;
+    flex-shrink: 0;
+    border-radius: 50px;
   }
   .header-instagram-btn {
-    padding: 5px 7px;
-    font-size: 0.70rem;
-    gap: 3px;
+    padding: 6px 9px;
+    font-size: 0.72rem;
+    gap: 4px;
+    flex-shrink: 0;
+    border-radius: 50px;
   }
   .header-instagram-icon {
-    width: 12px;
-    height: 12px;
+    width: 13px;
+    height: 13px;
   }
   .stats-badge {
-    padding: 5px 7px;
-    font-size: 0.68rem;
+    padding: 6px 9px;
+    font-size: 0.70rem;
     gap: 4px;
     white-space: nowrap;
+    flex-shrink: 0;
+    border-radius: 50px;
   }
   .pulse-dot {
     width: 6px;
     height: 6px;
   }
   .hero-title {
-    font-size: 2.1rem;
-    margin-bottom: 14px;
+    font-size: 1.95rem;
+    line-height: 1.2;
+    margin-bottom: 12px;
   }
   .hero-subtitle {
-    font-size: 0.92rem;
+    font-size: 0.90rem;
+    line-height: 1.55;
     margin-bottom: 20px;
   }
-  .hero-qr-card {
-    padding: 14px 16px;
+
+  /* 1. Sıradaki Davetli Fotoğraf Yükleme Kartı */
+  .guest-upload-banner {
+    margin-top: 0;
     margin-bottom: 20px;
+    padding: 16px 16px;
+    border-radius: 18px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    background: linear-gradient(135deg, rgba(26, 34, 52, 0.92) 0%, rgba(16, 22, 36, 0.95) 100%);
+    border: 1px solid rgba(232, 141, 103, 0.5);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  }
+  .guest-upload-left {
+    gap: 12px;
+    min-width: unset;
+  }
+  .guest-upload-icon-circle {
+    width: 42px;
+    height: 42px;
+    font-size: 1.25rem;
+  }
+  .guest-upload-title {
+    font-size: 1rem;
+  }
+  .guest-upload-desc {
+    font-size: 0.80rem;
+  }
+  .btn-guest-upload {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 18px;
+    font-size: 0.90rem;
+  }
+
+  /* 2. Sıradaki Yüz Tanıma Kartı */
+  .upload-card {
+    padding: 22px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  /* 3. Sıradaki Masa QR Vitrin Kartı */
+  .hero-qr-card {
+    padding: 16px 16px;
+    margin-top: 4px;
+    margin-bottom: 24px;
+    border-radius: 18px;
   }
   .hero-qr-inner {
     flex-direction: column;
@@ -1794,19 +1852,8 @@ body {
   .btn-hero-qr {
     width: 100%;
     justify-content: center;
-  }
-  .upload-card {
-    padding: 24px 16px;
-  }
-  .guest-upload-banner {
-    padding: 16px 14px;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-  }
-  .btn-guest-upload {
-    width: 100%;
-    justify-content: center;
+    padding: 12px 18px;
+    font-size: 0.88rem;
   }
   .action-buttons {
     flex-direction: column;

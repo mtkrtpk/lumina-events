@@ -144,6 +144,31 @@ class Database:
             # Orijinal sıralamayı koru
             return [result_map[pid] for pid in photo_ids if pid in result_map]
 
+    def get_all_drive_ids(self) -> List[str]:
+        """Kayıtlı tüm fotoğrafların Drive ID'lerini döner."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT drive_id FROM photos")
+            return [row[0] for row in cursor.fetchall()]
+
+    def delete_photos_by_drive_ids(self, drive_ids: List[str]) -> int:
+        """Drive'dan silinmiş fotoğrafları ve bağlı yüz vektörlerini veritabanından temizler."""
+        if not drive_ids:
+            return 0
+        placeholders = ",".join("?" for _ in drive_ids)
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            # Önce bağlı yüzleri sil
+            cursor.execute(f"SELECT id FROM photos WHERE drive_id IN ({placeholders})", drive_ids)
+            photo_ids = [row[0] for row in cursor.fetchall()]
+            if photo_ids:
+                p_placeholders = ",".join("?" for _ in photo_ids)
+                cursor.execute(f"DELETE FROM faces WHERE photo_id IN ({p_placeholders})", photo_ids)
+            # Fotoğrafları sil
+            cursor.execute(f"DELETE FROM photos WHERE drive_id IN ({placeholders})", drive_ids)
+            conn.commit()
+            return len(photo_ids)
+
     def get_stats(self) -> Dict[str, int]:
         """Veritabanındaki fotoğraf ve yüz sayılarını döner."""
         with self.get_connection() as conn:

@@ -52,12 +52,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const photos = data.total_photos || 0;
 
       if (photos > 0) {
-        statsText.textContent = `${photos.toLocaleString()} Fotoğraf Hazır`;
+        statsText.textContent = `${photos.toLocaleString()} Fotoğraf`;
       } else {
-        statsText.textContent = "Fotoğraflar bekleniyor";
+        statsText.textContent = "0 Fotoğraf";
       }
     } catch (e) {
-      statsText.textContent = "Sistem Çevrimiçi";
+      statsText.textContent = "Çevrimiçi";
     }
   }
 

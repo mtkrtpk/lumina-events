@@ -35,12 +35,6 @@
           <span class="upload-btn-text">Fotoğraf Yükle</span>
         </a>
 
-        <!-- Masa QR Kartı Butonu (Üst Bar) -->
-        <button type="button" class="header-qr-btn" id="btnHeaderQr" title="Masalar İçin QR Kartını Görüntüle ve Yazdır">
-          <span class="qr-btn-icon">🖨️</span>
-          <span class="qr-btn-text">Masa QR</span>
-        </button>
-
         <a href="https://instagram.com/mtkrtpk" target="_blank" rel="noopener noreferrer" class="header-instagram-btn" title="Instagram: @mtkrtpk">
           <svg class="header-instagram-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
@@ -53,7 +47,7 @@
         <!-- Header Rozeti (Kompakt ve Tıklanabilir) -->
         <button type="button" class="stats-badge" id="btnSyncAlbum" title="Tıkla: Fotoğrafları Yenile">
           <span class="pulse-dot" id="syncPulse"></span>
-          <span id="statsText">Albüm Hazırlanıyor...</span>
+          <span id="statsText">0 Fotoğraf</span>
           <span class="sync-icon" id="syncIconHeader">🔄</span>
         </button>
       </div>
@@ -74,22 +68,25 @@
         Birlikte paylaştığımız bu mutlu günden binlerce kareyi tek tek aramak zorunda değilsiniz. Bir selfie çekin, içinde olduğunuz tüm güzel anıları saniyeler içinde sizin için derleyelim.
       </p>
 
-      <!-- Masa QR Kartı Hızlı Erişim Bannerı -->
-      <div class="hero-qr-card">
-        <div class="hero-qr-badge">✨ DÜĞÜN MASA KARTLARI • 10x15 CM</div>
-        <div class="hero-qr-inner">
-          <div class="hero-qr-info">
-            <span class="hero-qr-names">İrem & Muratcan Düğünü</span>
-            <span class="hero-qr-desc">Davetlilerin fotoğraf yüklemesi için masalara özel 300 DPI QR kartlar</span>
+      <!-- 1. Davetliler İçin Fotoğraf & Video Yükleme Kartı (Yüz Tanımanın Üstünde) -->
+      <div class="guest-upload-banner">
+        <div class="guest-upload-left">
+          <div class="guest-upload-icon-circle">
+            <span>📸</span>
           </div>
-          <button type="button" class="btn-hero-qr" id="btnHeroQr">
-            <span class="btn-hero-qr-icon">🖨️</span>
-            <span>Masa Kartını Gör & Yazdır</span>
-          </button>
+          <div class="guest-upload-texts">
+            <span class="guest-upload-tag">DÜĞÜN ANILARI</span>
+            <strong class="guest-upload-title">Siz de Fotoğraf & Video Çektiniz mi?</strong>
+            <p class="guest-upload-desc">İrem & Muratcan'ın anı albümüne eklemek için formu doldurabilirsiniz</p>
+          </div>
         </div>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfplJA-jJefHc76erBeZG4E4BX_pmd5ebdmBx3UJvHSbUsM7w/viewform" target="_blank" rel="noopener noreferrer" class="btn-guest-upload">
+          <span>📤 Fotoğraf & Video Yükle</span>
+          <span class="upload-arrow">↗</span>
+        </a>
       </div>
 
-      <!-- Yükleme Kartı -->
+      <!-- 2. Yükleme Kartı (Selfie & Yüz Tanıma) -->
       <div class="upload-card" id="uploadCard">
         <input type="file" id="cameraInput" accept="image/*" capture="user" class="hidden-input">
         <input type="file" id="galleryInput" accept="image/*" class="hidden-input">
@@ -129,22 +126,19 @@
         </div>
       </div>
 
-      <!-- Davetliler İçin Fotoğraf & Video Yükleme Kartı (Google Form) -->
-      <div class="guest-upload-banner">
-        <div class="guest-upload-left">
-          <div class="guest-upload-icon-circle">
-            <span>📸</span>
+      <!-- 3. Masa QR Kartı Hızlı Erişim Bannerı (Yüz Tanımanın Altında) -->
+      <div class="hero-qr-card">
+        <div class="hero-qr-badge">✨ DÜĞÜN MASA KARTLARI • 10x15 CM</div>
+        <div class="hero-qr-inner">
+          <div class="hero-qr-info">
+            <span class="hero-qr-names">İrem & Muratcan Düğünü</span>
+            <span class="hero-qr-desc">Davetlilerin fotoğraf yüklemesi için masalara özel 300 DPI QR kartlar</span>
           </div>
-          <div class="guest-upload-texts">
-            <span class="guest-upload-tag">DÜĞÜN ANILARI</span>
-            <strong class="guest-upload-title">Siz de Fotoğraf & Video Çektiniz mi?</strong>
-            <p class="guest-upload-desc">İrem & Muratcan'ın anı albümüne eklemek için formu doldurabilirsiniz</p>
-          </div>
+          <button type="button" class="btn-hero-qr" id="btnHeroQr">
+            <span class="btn-hero-qr-icon">🖨️</span>
+            <span>Masa Kartını Gör & Yazdır</span>
+          </button>
         </div>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfplJA-jJefHc76erBeZG4E4BX_pmd5ebdmBx3UJvHSbUsM7w/viewform" target="_blank" rel="noopener noreferrer" class="btn-guest-upload">
-          <span>📤 Fotoğraf & Video Yükle</span>
-          <span class="upload-arrow">↗</span>
-        </a>
       </div>
     </section>
 

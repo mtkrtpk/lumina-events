@@ -37,7 +37,7 @@ AUTO_SYNC_INTERVAL = int(os.getenv("AUTO_SYNC_INTERVAL", 90))
 
 
 def perform_incremental_sync(folder_id: str) -> dict:
-    """Drive klasörünü kontrol edip yalnızca henüz veritabanında olmayan yeni fotoğrafları indeksler."""
+    """Drive klasörünü kontrol edip yeni fotoğrafları ekler, Drive'dan silinenleri de veritabanından temizler."""
     if not drive_service.is_connected():
         return {"status": "error", "message": "Drive bağlı değil"}
 
@@ -47,11 +47,22 @@ def perform_incremental_sync(folder_id: str) -> dict:
         logger.error(f"Otomatik tarama klasör okuma hatası: {e}")
         return {"status": "error", "message": str(e)}
 
+    current_drive_map = {img["id"]: img for img in images}
+    current_drive_ids = set(current_drive_map.keys())
+
+    # 1. Drive'dan silinmiş fotoğrafları veritabanından temizle
+    db_drive_ids = set(db.get_all_drive_ids())
+    deleted_ids = list(db_drive_ids - current_drive_ids)
+    deleted_count = 0
+    if deleted_ids:
+        deleted_count = db.delete_photos_by_drive_ids(deleted_ids)
+        logger.info(f"🗑️ Drive'dan silinen {deleted_count} fotoğraf veritabanından temizlendi.")
+
+    # 2. Yeni yüklenen fotoğrafları yapay zekaya indeksle
     new_indexed = 0
     new_faces = 0
 
-    for img in images:
-        drive_id = img["id"]
+    for drive_id, img in current_drive_map.items():
         if db.photo_exists(drive_id):
             continue
 
@@ -79,10 +90,15 @@ def perform_incremental_sync(folder_id: str) -> dict:
         except Exception as e:
             logger.error(f"Fotoğraf otomatik işlenirken hata ({drive_id}): {e}")
 
-    if new_indexed > 0:
-        logger.info(f"✅ Otomatik senkronizasyon: {new_indexed} yeni fotoğraf, {new_faces} yeni yüz eklendi.")
+    if new_indexed > 0 or deleted_count > 0:
+        logger.info(f"✅ Senkronizasyon tamam: +{new_indexed} yeni, -{deleted_count} silinen, +{new_faces} yüz.")
 
-    return {"status": "success", "new_photos": new_indexed, "new_faces": new_faces}
+    return {
+        "status": "success", 
+        "new_photos": new_indexed, 
+        "deleted_photos": deleted_count,
+        "new_faces": new_faces
+    }
 
 
 async def background_sync_loop():
