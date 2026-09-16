@@ -1,0 +1,8 @@
+.venv
+__pycache__
+*.pyc
+.git
+.DS_Store
+.system_generated
+node_modules
+sample_selfies

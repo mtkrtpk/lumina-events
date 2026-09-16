@@ -221,6 +221,75 @@ body {
   box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) !important;
 }
 
+/* Header Google Form Fotoğraf Yükleme Butonu */
+.header-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(232, 141, 103, 0.22) 0%, rgba(214, 93, 134, 0.22) 100%);
+  border: 1px solid rgba(232, 141, 103, 0.5);
+  padding: 6px 14px;
+  border-radius: 50px;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: inherit;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  white-space: nowrap;
+}
+
+.header-upload-btn:hover {
+  background: linear-gradient(135deg, #e88d67 0%, #d65d86 100%);
+  color: #fff;
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(232, 141, 103, 0.45);
+}
+
+.header-upload-btn:active {
+  transform: scale(0.96);
+}
+
+.upload-btn-icon {
+  font-size: 0.95rem;
+}
+
+/* Header Masa QR Kartı Butonu */
+.header-qr-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: linear-gradient(135deg, rgba(245, 192, 112, 0.16) 0%, rgba(232, 141, 103, 0.12) 100%);
+  border: 1px solid var(--border-gold);
+  padding: 6px 14px;
+  border-radius: 50px;
+  color: var(--accent-champagne);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.header-qr-btn:hover {
+  background: linear-gradient(135deg, #f5c070 0%, #e88d67 100%);
+  color: #080a0f;
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 18px rgba(245, 192, 112, 0.35);
+}
+
+.header-qr-btn:active {
+  transform: scale(0.96);
+}
+
+.qr-btn-icon {
+  font-size: 0.95rem;
+}
+
 .header-instagram-btn {
   display: inline-flex;
   align-items: center;
@@ -358,11 +427,115 @@ body {
   font-size: 1.08rem;
   color: var(--text-muted);
   line-height: 1.65;
-  margin-bottom: 38px;
+  margin-bottom: 24px;
   max-width: 580px;
   margin-left: auto;
   margin-right: auto;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+/* ==========================================================================
+   Hero Masa QR Kartı Bannerı
+   ========================================================================== */
+.hero-qr-card {
+  background: linear-gradient(135deg, rgba(14, 28, 22, 0.88) 0%, rgba(10, 18, 25, 0.88) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: var(--radius-md);
+  padding: 16px 22px;
+  margin-bottom: 28px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(245, 192, 112, 0.25);
+  text-align: left;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-qr-card:hover {
+  border-color: rgba(245, 192, 112, 0.7);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.55), 0 0 25px rgba(245, 192, 112, 0.2);
+}
+
+.hero-qr-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+}
+
+.hero-qr-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+
+.hero-qr-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hero-qr-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 240px;
+}
+
+.hero-qr-names {
+  font-family: var(--font-serif);
+  font-size: 1.18rem;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.2px;
+}
+
+.hero-qr-desc {
+  font-size: 0.84rem;
+  color: #cbd5e1;
+  line-height: 1.4;
+}
+
+.btn-hero-qr {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f5c070 0%, #e88d67 100%);
+  color: #080a0f;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(245, 192, 112, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-hero-qr:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(245, 192, 112, 0.5);
+}
+
+.btn-hero-qr:active {
+  transform: scale(0.97);
+}
+
+.btn-hero-qr-icon {
+  font-size: 1rem;
 }
 
 /* ==========================================================================
@@ -578,6 +751,110 @@ body {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Davetliler İçin Fotoğraf & Video Yükleme Bannerı (Google Form)
+   ========================================================================== */
+.guest-upload-banner {
+  margin-top: 24px;
+  background: linear-gradient(135deg, rgba(22, 28, 42, 0.78) 0%, rgba(14, 18, 28, 0.88) 100%);
+  border: 1px solid rgba(232, 141, 103, 0.38);
+  border-radius: var(--radius-md);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.guest-upload-banner:hover {
+  border-color: rgba(232, 141, 103, 0.65);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(232, 141, 103, 0.15);
+}
+
+.guest-upload-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 260px;
+}
+
+.guest-upload-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(232, 141, 103, 0.22) 0%, rgba(214, 93, 134, 0.22) 100%);
+  border: 1px solid rgba(232, 141, 103, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.guest-upload-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.guest-upload-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+}
+
+.guest-upload-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.guest-upload-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.btn-guest-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #e88d67 0%, #d65d86 100%);
+  color: #fff;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 11px 22px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(232, 141, 103, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.btn-guest-upload:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(232, 141, 103, 0.55);
+}
+
+.btn-guest-upload:active {
+  transform: scale(0.97);
+}
+
+.upload-arrow {
+  font-size: 1rem;
 }
 
 /* ==========================================================================
@@ -1119,6 +1396,326 @@ body {
 }
 
 /* ==========================================================================
+   Masa QR Kartı Modalı (Lüks Önizleme & Baskı)
+   ========================================================================== */
+.qr-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.qr-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 6, 10, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.qr-modal-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: linear-gradient(165deg, rgba(16, 22, 35, 0.98) 0%, rgba(8, 11, 18, 0.98) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: 24px;
+  padding: 26px 28px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.85), 0 0 40px rgba(245, 192, 112, 0.15);
+  animation: modalPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPopIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.qr-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.qr-modal-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--accent-gold);
+  margin-bottom: 4px;
+}
+
+.qr-modal-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.qr-modal-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.qr-modal-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.qr-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
+}
+
+/* Tema Seçici Sekmeler */
+.qr-theme-nav {
+  display: flex;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 5px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 18px;
+  overflow-x: auto;
+}
+
+.qr-theme-tab {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 8px 12px;
+  border-radius: 50px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.qr-theme-tab:hover {
+  color: #fff;
+}
+
+.qr-theme-tab.active {
+  background: linear-gradient(135deg, rgba(245, 192, 112, 0.22) 0%, rgba(232, 141, 103, 0.22) 100%);
+  color: var(--accent-gold);
+  border: 1px solid rgba(245, 192, 112, 0.45);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.theme-color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.dot-emerald { background: #0c3823; border-color: #f5c070; }
+.dot-cream { background: #faf4e8; border-color: #c59b27; }
+.dot-dark { background: #0a0d16; border-color: #d4af37; }
+
+.theme-badge-fav {
+  font-size: 0.62rem;
+  background: rgba(245, 192, 112, 0.25);
+  color: var(--accent-gold);
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* Önizleme */
+.qr-modal-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.qr-card-shadow-box {
+  position: relative;
+  width: 100%;
+  max-width: 270px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(245, 192, 112, 0.3);
+  background: #080a0f;
+  transition: transform 0.25s ease;
+}
+
+.qr-card-shadow-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(245, 192, 112, 0.5);
+}
+
+.qr-card-shadow-box img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.qr-spec-tag {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(8, 10, 15, 0.88);
+  backdrop-filter: blur(8px);
+  color: var(--accent-champagne);
+  border: 1px solid rgba(245, 192, 112, 0.35);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 50px;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+/* Aksiyon Butonları */
+.qr-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 16px;
+}
+
+.btn-qr-action-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f5c070 0%, #e88d67 100%);
+  color: #080a0f;
+  font-size: 0.94rem;
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(245, 192, 112, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-qr-action-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(245, 192, 112, 0.5);
+}
+
+.btn-qr-action-gold {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(245, 192, 112, 0.12);
+  border: 1px solid var(--border-gold);
+  color: var(--accent-champagne);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-qr-action-gold:hover {
+  background: rgba(245, 192, 112, 0.24);
+  color: #fff;
+  border-color: var(--accent-gold);
+  transform: translateY(-1px);
+}
+
+.btn-qr-action-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--border-glass);
+  color: #cbd5e1;
+  font-size: 0.84rem;
+  font-weight: 500;
+  padding: 9px 16px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-qr-action-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.btn-qr-action-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(232, 141, 103, 0.12);
+  border: 1px solid rgba(232, 141, 103, 0.4);
+  color: #fca5a5;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-qr-action-form:hover {
+  background: rgba(232, 141, 103, 0.22);
+  color: #fff;
+  border-color: rgba(232, 141, 103, 0.7);
+}
+
+.qr-modal-footer {
+  text-align: center;
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 12px;
+}
+
+.qr-modal-footer strong {
+  color: var(--accent-gold);
+}
+
+/* ==========================================================================
    Mobil Uyumluluk (Responsive)
    ========================================================================== */
 @media (max-width: 640px) {
@@ -1146,21 +1743,31 @@ body {
     letter-spacing: 0.2px;
   }
   .header-right {
-    gap: 6px;
-  }
-  .header-instagram-btn {
-    padding: 5px 9px;
-    font-size: 0.74rem;
     gap: 4px;
   }
+  .header-upload-btn {
+    padding: 5px 8px;
+    font-size: 0.70rem;
+    gap: 3px;
+  }
+  .header-qr-btn {
+    padding: 5px 7px;
+    font-size: 0.70rem;
+    gap: 3px;
+  }
+  .header-instagram-btn {
+    padding: 5px 7px;
+    font-size: 0.70rem;
+    gap: 3px;
+  }
   .header-instagram-icon {
-    width: 13px;
-    height: 13px;
+    width: 12px;
+    height: 12px;
   }
   .stats-badge {
-    padding: 5px 9px;
-    font-size: 0.72rem;
-    gap: 5px;
+    padding: 5px 7px;
+    font-size: 0.68rem;
+    gap: 4px;
     white-space: nowrap;
   }
   .pulse-dot {
@@ -1173,10 +1780,33 @@ body {
   }
   .hero-subtitle {
     font-size: 0.92rem;
-    margin-bottom: 26px;
+    margin-bottom: 20px;
+  }
+  .hero-qr-card {
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+  .hero-qr-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .btn-hero-qr {
+    width: 100%;
+    justify-content: center;
   }
   .upload-card {
     padding: 24px 16px;
+  }
+  .guest-upload-banner {
+    padding: 16px 14px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+  .btn-guest-upload {
+    width: 100%;
+    justify-content: center;
   }
   .action-buttons {
     flex-direction: column;
@@ -1210,4 +1840,20 @@ body {
     width: 100%;
     justify-content: center;
   }
+  .qr-modal-container {
+    padding: 20px 16px;
+    border-radius: 20px;
+    max-height: 94vh;
+  }
+  .qr-modal-title {
+    font-size: 1.3rem;
+  }
+  .qr-theme-tab {
+    padding: 6px 8px;
+    font-size: 0.74rem;
+  }
+  .qr-card-shadow-box {
+    max-width: 220px;
+  }
 }
+

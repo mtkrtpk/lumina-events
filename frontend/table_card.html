@@ -138,7 +138,34 @@
       transition: all 0.3s ease;
     }
 
-    /* Koyu Lüks Tema (Varsayılan) */
+    /* Zümrüt Yeşili & Altın Tema (Özel Lüks - Favori) */
+    .card-theme-emerald {
+      background: radial-gradient(circle at 50% 20%, #164e33 0%, #0c3321 50%, #061c12 100%);
+      color: #fdfbf7;
+      border: 2px solid #d4af37;
+      box-shadow: 0 25px 60px rgba(6, 28, 18, 0.8), 0 0 40px rgba(212, 175, 55, 0.2);
+    }
+    .card-theme-emerald .card-badge {
+      color: #f5c070;
+    }
+    .card-theme-emerald .card-title {
+      background: linear-gradient(135deg, #fae1b8 0%, #f5c070 50%, #e88d67 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-theme-emerald .card-subtitle {
+      color: #d1fae5;
+    }
+    .card-theme-emerald .scan-cta {
+      background: rgba(245, 192, 112, 0.15);
+      border-color: rgba(245, 192, 112, 0.4);
+      color: #f5c070;
+    }
+    .card-theme-emerald .thanks-text {
+      color: #fae1b8;
+    }
+
+    /* Koyu Lüks Tema */
     .card-theme-dark {
       background: linear-gradient(165deg, #090c14 0%, #101524 50%, #080b12 100%);
       color: #fdfbf7;
@@ -339,10 +366,11 @@
       <a href="/" class="btn-back">← Siteye Dön</a>
       <span class="toolbar-title">✨ Masa QR Kartı (10x15 cm)</span>
     </div>
-    <div style="display: flex; align-items: center; gap: 14px;">
+    <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
       <div class="theme-toggle-group">
-        <button type="button" class="theme-btn active" id="btnThemeDark">🌙 Koyu Gece & Altın</button>
-        <button type="button" class="theme-btn" id="btnThemeLight">☀️ Fildişi & Şampanya</button>
+        <button type="button" class="theme-btn active" id="btnThemeEmerald">🌿 Zümrüt & Altın</button>
+        <button type="button" class="theme-btn" id="btnThemeDark">🌙 Koyu Gece</button>
+        <button type="button" class="theme-btn" id="btnThemeLight">☀️ Fildişi & Krem</button>
       </div>
       <button type="button" class="btn-print" onclick="window.print()">
         🖨️ Yazdır / PDF İndir
@@ -350,8 +378,8 @@
     </div>
   </div>
 
-  <!-- Masa Kartı -->
-  <div class="card-container card-theme-dark" id="cardContainer">
+  <!-- Masa Kartı (Varsayılan Zümrüt Yeşili) -->
+  <div class="card-container card-theme-emerald" id="cardContainer">
     <div class="card-inner">
       <div class="card-border-frame"></div>
       <div class="corner-decor corner-tl"></div>
@@ -362,45 +390,45 @@
       <!-- Üst Başlık -->
       <div class="card-header">
         <span class="card-sparkle">✨</span>
-        <div class="card-badge">BİZİMLE PAYLAŞTIĞINIZ ANILAR</div>
-        <h1 class="card-title">Gözünüzden <br>Bizim Günümüz</h1>
+        <div class="card-badge">DÜĞÜNÜMÜZE HOŞ GELDİNİZ</div>
+        <h1 class="card-title">İrem & Muratcan</h1>
         <p class="card-subtitle">
-          Bu mutlu günde çektiğiniz tüm güzel fotoğraf ve videoları ortak albümümüze ekleyebilirsiniz.
+          Bu mutlu günümüzde çektiğiniz tüm güzel fotoğraf ve videoları lütfen bizimle paylaşın!
         </p>
       </div>
 
       <!-- Kullanıcının QR Kodu -->
       <div class="card-qr-wrapper">
-        <img src="assets/form_qr.png" alt="Google Form QR Kodu" class="card-qr-img">
+        <img src="assets/form_qr.png" alt="İrem ve Muratcan Fotoğraf Yükleme QR Kodu" class="card-qr-img">
       </div>
 
       <!-- Alt Bilgi & Çağrı -->
       <div class="card-footer">
         <div class="scan-cta">
-          <span>📷</span> Kameranızı QR Koda Doğrultun
+          <span>📷</span> Kameranızı QR Koda Doğrultun ve Yükleyin
         </div>
         <p class="thanks-text">Mutluluğumuzu paylaştığınız için teşekkür ederiz</p>
-        <span class="brand-tag">Lumina Events • @mtkrtpk</span>
+        <span class="brand-tag">İ R E M   &   M U R A T C A N   •   @mtkrtpk</span>
       </div>
     </div>
   </div>
 
   <script>
     const cardContainer = document.getElementById('cardContainer');
+    const btnThemeEmerald = document.getElementById('btnThemeEmerald');
     const btnThemeDark = document.getElementById('btnThemeDark');
     const btnThemeLight = document.getElementById('btnThemeLight');
+    const allBtns = [btnThemeEmerald, btnThemeDark, btnThemeLight];
 
-    btnThemeDark.addEventListener('click', () => {
-      cardContainer.className = 'card-container card-theme-dark';
-      btnThemeDark.classList.add('active');
-      btnThemeLight.classList.remove('active');
-    });
+    function setActiveTheme(btn, themeClass) {
+      allBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      cardContainer.className = 'card-container ' + themeClass;
+    }
 
-    btnThemeLight.addEventListener('click', () => {
-      cardContainer.className = 'card-container card-theme-light';
-      btnThemeLight.classList.add('active');
-      btnThemeDark.classList.remove('active');
-    });
+    btnThemeEmerald.addEventListener('click', () => setActiveTheme(btnThemeEmerald, 'card-theme-emerald'));
+    btnThemeDark.addEventListener('click', () => setActiveTheme(btnThemeDark, 'card-theme-dark'));
+    btnThemeLight.addEventListener('click', () => setActiveTheme(btnThemeLight, 'card-theme-light'));
   </script>
 </body>
 </html>

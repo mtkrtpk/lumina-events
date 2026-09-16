@@ -390,4 +390,86 @@ document.addEventListener("DOMContentLoaded", () => {
       toast.classList.add("hidden");
     }, 4000);
   }
+
+  // ==========================================================================
+  // 7. Masa QR Kartı Modalı & Tema Değiştirici
+  // ==========================================================================
+  const qrModal = document.getElementById("qrModal");
+  const qrModalBackdrop = document.getElementById("qrModalBackdrop");
+  const btnCloseQrModal = document.getElementById("btnCloseQrModal");
+  const btnHeaderQr = document.getElementById("btnHeaderQr");
+  const btnHeroQr = document.getElementById("btnHeroQr");
+  const qrModalCardImg = document.getElementById("qrModalCardImg");
+  const btnQrDownloadPdf = document.getElementById("btnQrDownloadPdf");
+  const btnQrDownloadPng = document.getElementById("btnQrDownloadPng");
+  const qrThemeTabs = document.querySelectorAll(".qr-theme-tab");
+
+  const qrThemes = {
+    zumrut: {
+      preview: "assets/irem_muratcan_masa_karti_zumrut_web.png",
+      pdf: "assets/irem_muratcan_masa_karti_zumrut.pdf",
+      png: "assets/irem_muratcan_masa_karti_zumrut.png",
+      pdfName: "Irem_Muratcan_Masa_Karti_Zumrut_Yesil.pdf",
+      pngName: "Irem_Muratcan_Masa_Karti_Zumrut_Yesil.png"
+    },
+    krem: {
+      preview: "assets/irem_muratcan_masa_karti_krem.png",
+      pdf: "assets/irem_muratcan_masa_karti_krem.pdf",
+      png: "assets/irem_muratcan_masa_karti_krem.png",
+      pdfName: "Irem_Muratcan_Masa_Karti_Krem.pdf",
+      pngName: "Irem_Muratcan_Masa_Karti_Krem.png"
+    },
+    koyu: {
+      preview: "assets/irem_muratcan_masa_karti_koyu.png",
+      pdf: "assets/irem_muratcan_masa_karti_koyu.pdf",
+      png: "assets/irem_muratcan_masa_karti_koyu.png",
+      pdfName: "Irem_Muratcan_Masa_Karti_Koyu.pdf",
+      pngName: "Irem_Muratcan_Masa_Karti_Koyu.png"
+    }
+  };
+
+  function openQrModal() {
+    if (!qrModal) return;
+    qrModal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeQrModal() {
+    if (!qrModal) return;
+    qrModal.classList.add("hidden");
+    document.body.style.overflow = "auto";
+  }
+
+  if (btnHeaderQr) btnHeaderQr.addEventListener("click", openQrModal);
+  if (btnHeroQr) btnHeroQr.addEventListener("click", openQrModal);
+  if (btnCloseQrModal) btnCloseQrModal.addEventListener("click", closeQrModal);
+  if (qrModalBackdrop) qrModalBackdrop.addEventListener("click", closeQrModal);
+
+  qrThemeTabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      const themeKey = tab.getAttribute("data-theme");
+      const config = qrThemes[themeKey];
+      if (!config) return;
+
+      qrThemeTabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      if (qrModalCardImg) qrModalCardImg.src = config.preview;
+      if (btnQrDownloadPdf) {
+        btnQrDownloadPdf.href = config.pdf;
+        btnQrDownloadPdf.setAttribute("download", config.pdfName);
+      }
+      if (btnQrDownloadPng) {
+        btnQrDownloadPng.href = config.png;
+        btnQrDownloadPng.setAttribute("download", config.pngName);
+      }
+    });
+  });
+
+  // ESC tuşu ile QR modalını kapatma desteği
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && qrModal && !qrModal.classList.contains("hidden")) {
+      closeQrModal();
+    }
+  });
 });
