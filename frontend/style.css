@@ -1747,35 +1747,27 @@ body {
     display: none; /* Mobilde başlık ferah olsun diye alt yazıyı gizle */
   }
   .header-right {
-    gap: 5px;
+    gap: 8px;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    flex-shrink: 1;
-    min-width: 0;
-  }
-  .header-upload-btn {
-    padding: 6px 9px;
-    font-size: 0.72rem;
-    gap: 4px;
     flex-shrink: 0;
-    border-radius: 50px;
   }
   .header-instagram-btn {
-    padding: 6px 9px;
-    font-size: 0.72rem;
-    gap: 4px;
+    padding: 6px 11px;
+    font-size: 0.76rem;
+    gap: 5px;
     flex-shrink: 0;
     border-radius: 50px;
   }
   .header-instagram-icon {
-    width: 13px;
-    height: 13px;
+    width: 14px;
+    height: 14px;
   }
   .stats-badge {
-    padding: 6px 9px;
-    font-size: 0.70rem;
-    gap: 4px;
+    padding: 6px 11px;
+    font-size: 0.74rem;
+    gap: 5px;
     white-space: nowrap;
     flex-shrink: 0;
     border-radius: 50px;
