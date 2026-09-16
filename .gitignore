@@ -24,6 +24,7 @@ backend/data/*.json
 
 # Scratch & Binaries
 scratch/
+bin/
 
 # OS
 .DS_Store

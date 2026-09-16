@@ -2,7 +2,7 @@
 title: Lumina Events - Irem & Muratcan
 emoji: 💍
 colorFrom: green
-colorTo: emerald
+colorTo: yellow
 sdk: docker
 app_port: 7860
 pinned: false
