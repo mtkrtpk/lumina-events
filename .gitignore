@@ -22,6 +22,9 @@ backend/data/*.json
 # Environment
 .env
 
+# Scratch & Binaries
+scratch/
+
 # OS
 .DS_Store
 Thumbs.db
