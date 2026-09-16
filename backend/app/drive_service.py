@@ -34,14 +34,30 @@ class DriveService:
     def _authenticate(self) -> None:
         """
         Drive API kimlik doğrulamasını gerçekleştirir.
-        Önce Service Account dosyasını kontrol eder, yoksa OAuth token araması yapar.
+        Önce GOOGLE_SERVICE_ACCOUNT_JSON ortam değişkenini kontrol eder,
+        ardından Service Account dosyasını, yoksa OAuth token araması yapar.
         """
+        # 0. Öncelik: Hugging Face / Cloud Secrets ortam değişkeni
+        service_account_json = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON")
+        if service_account_json:
+            try:
+                import json
+                info = json.loads(service_account_json)
+                creds = service_account.Credentials.from_service_account_info(
+                    info, scopes=SCOPES
+                )
+                self.service = build('drive', 'v3', credentials=creds)
+                logger.info("Google Drive API: Service Account (Secret Env) ile başarıyla yetkilendirildi.")
+                return
+            except Exception as e:
+                logger.error(f"GOOGLE_SERVICE_ACCOUNT_JSON parse edilemedi: {e}")
+
         if not os.path.exists(self.credentials_path):
             logger.warning(f"Credentials dosyası bulunamadı: {self.credentials_path}")
             return
 
         try:
-            # 1. Öncelik: Service Account (Sunucu & Otomasyon için en kolayı)
+            # 1. Öncelik: Service Account Dosyası (Yerel geliştirme)
             creds = service_account.Credentials.from_service_account_file(
                 self.credentials_path, scopes=SCOPES
             )

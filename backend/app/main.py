@@ -102,11 +102,11 @@ def perform_incremental_sync(folder_id: str) -> dict:
 
 
 async def background_sync_loop():
-    """Belirli aralıklarla (varsayılan 90 saniye) arka planda otomatik tarama yapar."""
+    """Belirli aralıklarla arka planda otomatik tarama yapar."""
     while True:
         try:
             await asyncio.sleep(AUTO_SYNC_INTERVAL)
-            folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
+            folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID", "12ile--MomqOHEuLhOTaFC7lZHm8WSlNBAVCm6A37AgBIC3DdjaTkRtZKz08i4Q5Ke2KfQbY1")
             if folder_id and folder_id != "BURAYA_DRIVE_KLASOR_ID_GELECEK" and drive_service.is_connected():
                 await asyncio.to_thread(perform_incremental_sync, folder_id)
         except asyncio.CancelledError:
@@ -116,19 +116,31 @@ async def background_sync_loop():
             logger.error(f"Arka plan döngüsünde beklenmeyen hata: {e}")
 
 
+async def initial_sync_task():
+    """Sunucu ayağa kalktıktan 5 saniye sonra ilk senkronizasyonu başlatır."""
+    try:
+        await asyncio.sleep(5)
+        folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID", "12ile--MomqOHEuLhOTaFC7lZHm8WSlNBAVCm6A37AgBIC3DdjaTkRtZKz08i4Q5Ke2KfQbY1")
+        if folder_id and folder_id != "BURAYA_DRIVE_KLASOR_ID_GELECEK" and drive_service.is_connected():
+            logger.info("Sunucu başlangıç ilk Drive senkronizasyonu başlatılıyor...")
+            await asyncio.to_thread(perform_incremental_sync, folder_id)
+    except Exception as e:
+        logger.warning(f"İlk senkronizasyonda hata: {e}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     sync_task = None
+    init_task = None
     if AUTO_SYNC_INTERVAL > 0:
         sync_task = asyncio.create_task(background_sync_loop())
-        logger.info(f"Otomatik Drive tarayıcısı aktif edildi (Her {AUTO_SYNC_INTERVAL} saniyede / {AUTO_SYNC_INTERVAL // 60} dakikada bir kontrol edilecek).")
+        logger.info(f"Otomatik Drive tarayıcısı aktif edildi (Her {AUTO_SYNC_INTERVAL} saniyede bir kontrol edilecek).")
+    init_task = asyncio.create_task(initial_sync_task())
     yield
     if sync_task:
         sync_task.cancel()
-        try:
-            await sync_task
-        except asyncio.CancelledError:
-            pass
+    if init_task:
+        init_task.cancel()
 
 
 app = FastAPI(
@@ -184,7 +196,7 @@ async def get_stats():
 @app.post("/api/sync")
 async def manual_sync():
     """İsteğe bağlı anlık Drive taramasını manuel olarak tetikler."""
-    folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID")
+    folder_id = os.getenv("GOOGLE_DRIVE_FOLDER_ID", "12ile--MomqOHEuLhOTaFC7lZHm8WSlNBAVCm6A37AgBIC3DdjaTkRtZKz08i4Q5Ke2KfQbY1")
     if not folder_id or folder_id == "BURAYA_DRIVE_KLASOR_ID_GELECEK":
         raise HTTPException(status_code=400, detail="Google Drive klasör ID ayarlanmamış.")
     result = await asyncio.to_thread(perform_incremental_sync, folder_id)

@@ -1,4 +1,14 @@
-# 📸 Düğün & Etkinlik Fotoğraf Paylaşım Platformu (AI Destekli Yüz Eşleme)
+---
+title: Lumina Events - Irem & Muratcan
+emoji: 💍
+colorFrom: green
+colorTo: emerald
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
+# 📸 Lumina Events - AI Düğün Fotoğraf Paylaşım Platformu
 
 0 maliyetli (Zero-Cost MVP), davetlilerin Google Drive üzerindeki binlerce fotoğraf arasından sadece kendi yüzlerinin olduğu fotoğrafları saniyeler içinde bulup indirebilmelerini sağlayan hibrit web platformu.
 
