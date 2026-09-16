@@ -37,5 +37,8 @@ trap cleanup SIGINT SIGTERM EXIT
 
 sleep 2
 
-# Cloudflare canlı tüneli başlat
-./bin/cloudflared tunnel --url http://127.0.0.1:8000
+# Ngrok kalıcı canlı tüneli başlat
+echo "🎉 KALICI WEB ADRESİNİZ:"
+echo "👉 https://backwash-basics-cogwheel.ngrok-free.dev"
+echo ""
+./bin/ngrok http --url=backwash-basics-cogwheel.ngrok-free.dev 8000
